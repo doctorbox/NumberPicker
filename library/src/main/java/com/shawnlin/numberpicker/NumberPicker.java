@@ -620,12 +620,12 @@ public class NumberPicker extends LinearLayout {
     /**
      * Padding start of the text from divider start
      */
-    private int mPaddingStart;
+    private int mTextInsetStart;
 
     /**
      * Padding start of the text from divider end
      */
-    private int mPaddingEnd;
+    private int mTextInsetEnd;
 
     /**
      * Interface to listen for changes of the current value.
@@ -808,8 +808,8 @@ public class NumberPicker extends LinearLayout {
         mAccessibilityDescriptionEnabled = attributes.getBoolean(
             R.styleable.NumberPicker_np_accessibilityDescriptionEnabled, true);
 
-        mPaddingStart = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_paddingStart, 0);
-        mPaddingEnd = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_paddingEnd, 0);
+        mTextInsetStart = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_textInsetStart, 0);
+        mTextInsetEnd = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_textInsetEnd, 0);
 
         // By default Linearlayout that we extend is not drawn. This is
         // its draw() method is not called but dispatchDraw() is called
@@ -933,7 +933,7 @@ public class NumberPicker extends LinearLayout {
         super.onMeasure(newWidthMeasureSpec, newHeightMeasureSpec);
         // Flag if we are measured with width or height less than the respective min.
         final int widthSize = resolveSizeAndStateRespectingMinSize(mMinWidth, getMeasuredWidth(),
-            widthMeasureSpec) + mPaddingStart + mPaddingEnd;
+            widthMeasureSpec) + mTextInsetStart + mTextInsetEnd;
         final int heightSize = resolveSizeAndStateRespectingMinSize(mMinHeight, getMeasuredHeight(),
             heightMeasureSpec);
         setMeasuredDimension(widthSize, heightSize);
