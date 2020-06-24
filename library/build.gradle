@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
+    }
+}
+
 apply plugin: 'com.android.library'
 apply plugin: "guru.stefma.bintrayrelease"
 
