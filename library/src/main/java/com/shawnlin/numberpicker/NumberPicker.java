@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -628,6 +630,34 @@ public class NumberPicker extends LinearLayout {
     private int mTextInsetEnd;
 
     /**
+     * Should highlight the selected item or not
+     */
+    private boolean mShowHighlight;
+
+    // Used to internally show and hide the highlighted Section as we don't want to show
+    // highlight when scrolling
+    private boolean mShowHighlightInternal;
+
+    /**
+     * Color to highlight the selection
+     */
+    @ColorInt
+    private int mHighlightColor;
+
+    /**
+     * Padding of highlighted area from left  if orientation in Horizontal and top if Vertical
+     */
+    private int mHighlightPaddingStart;
+
+    /**
+     * Padding of highlighted area from left  if orientation in Horizontal and top if Vertical
+     */
+    private int mHighlightPaddingEnd;
+
+    private Paint mHighlighter = new Paint();
+    private RectF mHighlightedRect = new RectF();
+
+    /**
      * Interface to listen for changes of the current value.
      */
     public interface OnValueChangeListener {
@@ -811,6 +841,14 @@ public class NumberPicker extends LinearLayout {
         mTextInsetStart = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_textInsetStart, 0);
         mTextInsetEnd = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_textInsetEnd, 0);
 
+        mShowHighlight = attributes.getBoolean(R.styleable.NumberPicker_np_show_highlight, false);
+        mShowHighlightInternal = mShowHighlight;
+
+        int transparentColor = ContextCompat.getColor(context, android.R.color.transparent);
+        mHighlightColor = attributes.getColor(R.styleable.NumberPicker_np_highlight_color, transparentColor);
+        mHighlightPaddingStart = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_highlight_padding_start, 0);
+        mHighlightPaddingEnd = attributes.getDimensionPixelOffset(R.styleable.NumberPicker_np_highlight_padding_end, 0);
+
         // By default Linearlayout that we extend is not drawn. This is
         // its draw() method is not called but dispatchDraw() is called
         // directly (see ViewGroup.drawChild()). However, this class uses
@@ -827,6 +865,7 @@ public class NumberPicker extends LinearLayout {
         mSelectedText.setEnabled(false);
         mSelectedText.setFocusable(false);
         mSelectedText.setImeOptions(EditorInfo.IME_ACTION_NONE);
+        mSelectedText.setBackgroundColor(Color.RED);
 
         // create the selector wheel paint
         Paint paint = new Paint();
@@ -1774,6 +1813,68 @@ public class NumberPicker extends LinearLayout {
             }
         }
 
+
+        // draw the dividers
+        if (showSelectorWheel && mDividerDrawable != null) {
+            if (isHorizontalMode()) {
+                final int bottom = getBottom();
+
+                // draw the left divider
+                final int leftOfLeftDivider = mLeftDividerLeft;
+                final int rightOfLeftDivider = leftOfLeftDivider + mDividerThickness;
+                mDividerDrawable.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, bottom);
+                mDividerDrawable.draw(canvas);
+
+                // draw the right divider
+                final int rightOfRightDivider = mRightDividerRight;
+                final int leftOfRightDivider = rightOfRightDivider - mDividerThickness;
+                mDividerDrawable.setBounds(leftOfRightDivider, 0, rightOfRightDivider, bottom);
+                mDividerDrawable.draw(canvas);
+            } else {
+                final int right = getRight();
+
+                // draw the top divider
+                final int topOfTopDivider = mTopDividerTop;
+                final int bottomOfTopDivider = topOfTopDivider + mDividerThickness;
+                mDividerDrawable.setBounds(0, topOfTopDivider, right, bottomOfTopDivider);
+                mDividerDrawable.draw(canvas);
+
+                // draw the bottom divider
+                final int bottomOfBottomDivider = mBottomDividerBottom;
+                final int topOfBottomDivider = bottomOfBottomDivider - mDividerThickness;
+                mDividerDrawable.setBounds(0, topOfBottomDivider, right, bottomOfBottomDivider);
+                mDividerDrawable.draw(canvas);
+            }
+        }
+
+        // draw Highlighted Portion between dividers
+        if (mShowHighlightInternal && mShowHighlight && showSelectorWheel && mDividerDrawable != null) {
+            if (isHorizontalMode()) {
+                final int bottom = getHeight() - mHighlightPaddingEnd;
+                final int left = mLeftDividerLeft + mDividerThickness;
+                final int right = mRightDividerRight - mDividerThickness;
+                final int top = mHighlightPaddingStart;
+
+                mHighlighter.setColor(mHighlightColor);
+                mHighlightedRect.left = left;
+                mHighlightedRect.top = top;
+                mHighlightedRect.right = right;
+                mHighlightedRect.bottom = bottom;
+                canvas.drawRect(mHighlightedRect, mHighlighter);
+            } else {
+                final int bottom = mBottomDividerBottom - mDividerThickness;
+                final int left = mHighlightPaddingStart;
+                final int right = getWidth() - mHighlightPaddingEnd;
+                final int top = mTopDividerTop + mDividerThickness;
+
+                mHighlighter.setColor(mHighlightColor);
+                mHighlightedRect.left = left;
+                mHighlightedRect.top = top;
+                mHighlightedRect.right = right;
+                mHighlightedRect.bottom = bottom;
+                canvas.drawRect(mHighlightedRect, mHighlighter);
+            }
+        }
         // draw the selector wheel
         int[] selectorIndices = getSelectorIndices();
         for (int i = 0; i < selectorIndices.length; i++) {
@@ -1822,39 +1923,6 @@ public class NumberPicker extends LinearLayout {
 
         // restore canvas
         canvas.restore();
-
-        // draw the dividers
-        if (showSelectorWheel && mDividerDrawable != null) {
-            if (isHorizontalMode()) {
-                final int bottom = getBottom();
-
-                // draw the left divider
-                final int leftOfLeftDivider = mLeftDividerLeft;
-                final int rightOfLeftDivider = leftOfLeftDivider + mDividerThickness;
-                mDividerDrawable.setBounds(leftOfLeftDivider, 0, rightOfLeftDivider, bottom);
-                mDividerDrawable.draw(canvas);
-
-                // draw the right divider
-                final int rightOfRightDivider = mRightDividerRight;
-                final int leftOfRightDivider = rightOfRightDivider - mDividerThickness;
-                mDividerDrawable.setBounds(leftOfRightDivider, 0, rightOfRightDivider, bottom);
-                mDividerDrawable.draw(canvas);
-            } else {
-                final int right = getRight();
-
-                // draw the top divider
-                final int topOfTopDivider = mTopDividerTop;
-                final int bottomOfTopDivider = topOfTopDivider + mDividerThickness;
-                mDividerDrawable.setBounds(0, topOfTopDivider, right, bottomOfTopDivider);
-                mDividerDrawable.draw(canvas);
-
-                // draw the bottom divider
-                final int bottomOfBottomDivider = mBottomDividerBottom;
-                final int topOfBottomDivider = bottomOfBottomDivider - mDividerThickness;
-                mDividerDrawable.setBounds(0, topOfBottomDivider, right, bottomOfBottomDivider);
-                mDividerDrawable.draw(canvas);
-            }
-        }
     }
 
     private void drawText(String text, float x, float y, Paint paint, Canvas canvas) {
@@ -2139,6 +2207,9 @@ public class NumberPicker extends LinearLayout {
         if (mOnScrollListener != null) {
             mOnScrollListener.onScrollStateChange(this, scrollState);
         }
+
+        // Hiding highlight if scrolling
+        mShowHighlightInternal = scrollState == OnScrollListener.SCROLL_STATE_IDLE;
     }
 
     /**
@@ -2804,6 +2875,26 @@ public class NumberPicker extends LinearLayout {
             / mMaxFlingVelocityCoefficient;
     }
 
+    public void setShowHighlight(boolean mShowHighlight) {
+        this.mShowHighlight = mShowHighlight;
+        invalidate();
+    }
+
+    public void setHighlightColor(int mHighlightColor) {
+        this.mHighlightColor = mHighlightColor;
+        invalidate();
+    }
+
+    public void setHighlightPaddingStart(int mHighlightPaddingStart) {
+        this.mHighlightPaddingStart = mHighlightPaddingStart;
+        invalidate();
+    }
+
+    public void setHighlightPaddingEnd(int mHighlightPaddingEnd) {
+        this.mHighlightPaddingEnd = mHighlightPaddingEnd;
+        invalidate();
+    }
+
     public boolean isHorizontalMode() {
         return getOrientation() == HORIZONTAL;
     }
@@ -2908,4 +2999,19 @@ public class NumberPicker extends LinearLayout {
         return mMaxFlingVelocityCoefficient;
     }
 
+    public boolean isShowHighlight() {
+        return mShowHighlight;
+    }
+
+    public int getHighlightColor() {
+        return mHighlightColor;
+    }
+
+    public int getHighlightPaddingStart() {
+        return mHighlightPaddingStart;
+    }
+
+    public int getHighlightPaddingEnd() {
+        return mHighlightPaddingEnd;
+    }
 }

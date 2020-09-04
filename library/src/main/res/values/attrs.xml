@@ -53,5 +53,9 @@
         <attr name="np_value" format="integer" />
         <attr name="np_wheelItemCount" format="integer" />
         <attr name="np_wrapSelectorWheel" format="boolean" />
+        <attr name="np_show_highlight" format="boolean" />
+        <attr name="np_highlight_color" format="color" />
+        <attr name="np_highlight_padding_start" format="dimension" />
+        <attr name="np_highlight_padding_end" format="dimension" />
     </declare-styleable>
 </resources>
