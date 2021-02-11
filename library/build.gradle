@@ -1,14 +1,14 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
-    }
-}
+//buildscript {
+//    repositories {
+//        jcenter()
+//    }
+//    dependencies {
+//        classpath "guru.stefma.bintrayrelease:bintrayrelease:1.1.2"
+//    }
+//}
 
 apply plugin: 'com.android.library'
-apply plugin: "guru.stefma.bintrayrelease"
+//apply plugin: "guru.stefma.bintrayrelease"
 
 android {
     compileSdkVersion 28
@@ -27,18 +27,18 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 }
 
-version = VERSION_NAME
-group = GROUP_ID
-androidArtifact {
-    artifactId = ARTIFACT_ID
-    license {
-        name = POM_LICENSE_NAME
-        url = POM_LICENSE_URL
-        distribution = POM_LICENSE_DIST
-    }
-}
-publish {
-    userOrg = POM_DEVELOPER_ID
-    desc = POM_DESCRIPTION
-    website = POM_URL
-}
+//version = VERSION_NAME
+//group = GROUP_ID
+//androidArtifact {
+//    artifactId = ARTIFACT_ID
+//    license {
+//        name = POM_LICENSE_NAME
+//        url = POM_LICENSE_URL
+//        distribution = POM_LICENSE_DIST
+//    }
+//}
+//publish {
+//    userOrg = POM_DEVELOPER_ID
+//    desc = POM_DESCRIPTION
+//    website = POM_URL
+//}
