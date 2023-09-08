@@ -3,14 +3,15 @@
 The android library that provides a simple and customizable NumberPicker.
 It's based on [android.widget.NumberPicker](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/widget/NumberPicker.java).
 
-[![Platform](http://img.shields.io/badge/platform-android-brightgreen.svg?style=flat)](http://developer.android.com/index.html) [![Language](http://img.shields.io/badge/language-java-orange.svg?style=flat)](http://www.oracle.com/technetwork/java/javase/downloads/index.html) [![](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-NumberPicker-green.svg?style=true)](https://android-arsenal.com/details/1/3718) [![API](https://img.shields.io/badge/API-15%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=15) [![Download](https://api.bintray.com/packages/shawnlin013/maven/number-picker/images/download.svg)](https://bintray.com/shawnlin013/maven/number-picker/_latestVersion) [![CircleCI](https://circleci.com/gh/ShawnLin013/NumberPicker.svg?style=svg)](https://circleci.com/gh/ShawnLin013/NumberPicker)
+[![Platform](http://img.shields.io/badge/platform-android-brightgreen.svg?style=flat)](http://developer.android.com/index.html) [![Language](http://img.shields.io/badge/language-java-orange.svg?style=flat)](http://www.oracle.com/technetwork/java/javase/downloads/index.html) [![](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-NumberPicker-green.svg?style=true)](https://android-arsenal.com/details/1/3718) [![API](https://img.shields.io/badge/API-15%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=15) ![Maven Central](https://img.shields.io/maven-central/v/io.github.ShawnLin013/number-picker) [![CircleCI](https://circleci.com/gh/ShawnLin013/NumberPicker.svg?style=svg)](https://circleci.com/gh/ShawnLin013/NumberPicker)
+[![GitHub stars](https://img.shields.io/github/stars/ShawnLin013/NumberPicker)](https://github.com/ShawnLin013/NumberPicker/stargazers) [![GitHub forks](https://img.shields.io/github/forks/ShawnLin013/NumberPicker)](https://github.com/ShawnLin013/NumberPicker/network)
 
 <img src="https://github.com/ShawnLin013/NumberPicker/blob/master/screenshot/number-picker-theme.png">
 
 ## Features
 
 - Customizable fonts(color, size, strikethrough, underline, typeface)
-- Customizable dividers(color, distance, thickness)
+- Customizable dividers(color, distance, length, thickness, type)
 - Horizontal and Vertical mode are both supported
 - Ascending and Descending order are both supported
 - Also supports negative values and multiple lines
@@ -138,32 +139,35 @@ add `xmlns:app="http://schemas.android.com/apk/res-auto"`
 
 ### Attributes
 
-|attribute name|attribute description|
-|:---:|:---:|
+|attribute name|attribute description|default|
+|:---:|:---:|:---:|
 |np_width|The width of this widget.|
 |np_height|The height of this widget.|
-|np_accessibilityDescriptionEnabled|Flag whether the accessibility description enabled. Default is enabled.|
+|np_accessibilityDescriptionEnabled|Flag whether the accessibility description enabled.|enabled|
 |np_dividerColor|The color of the selection divider.|
 |np_dividerDistance|The distance between the two selection dividers.|
+|np_dividerLength|The length of the selection divider.|
 |np_dividerThickness|The thickness of the selection divider.|
+|np_dividerType|The type of the selection divider.|side_lines|
 |np_fadingEdgeEnabled|Flag whether the fading edge should enabled.|
 |np_fadingEdgeStrength|The strength of fading edge while drawing the selector.|
 |np_formatter|The formatter of the numbers.|
 |np_hideWheelUntilFocused|Flag whether the selector wheel should hidden until the picker has focus.|
+|np_itemSpacing|Amount of space between items.|
 |np_lineSpacingMultiplier|The line spacing multiplier for the multiple lines.|
 |np_max|The max value of this widget.|
 |np_maxFlingVelocityCoefficient|The coefficient to adjust (divide) the max fling velocity.|
 |np_min|The min value of this widget.|
-|np_order|The order of this widget. Default is ascending.|
-|np_orientation|The orientation of this widget. Default is vertical.|
+|np_order|The order of this widget.|ascending|
+|np_orientation|The orientation of this widget.|vertical|
 |np_scrollerEnabled|Flag whether the scroller should enabled.|
-|np_selectedTextAlign|The text align of the selected number. Default is center.|
+|np_selectedTextAlign|The text align of the selected number.|center|
 |np_selectedTextColor|The text color of the selected number.|
 |np_selectedTextSize|The text size of the selected number.|
 |np_selectedTextStrikeThru|Flag whether the selected text should strikethroughed.|
 |np_selectedTextUnderline|Flag whether the selected text should underlined.|
 |np_selectedTypeface|The typeface of the selected numbers.|
-|np_textAlign|The text align of the numbers. Default is center.|
+|np_textAlign|The text align of the numbers.|center|
 |np_textColor|The text color of the numbers.|
 |np_textSize|The text size of the numbers.|
 |np_textStrikeThru|Flag whether the text should strikethroughed.|
@@ -180,12 +184,12 @@ Add the dependency in your `build.gradle`
 ```gradle
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
 dependencies {
-    implementation 'com.shawnlin:number-picker:2.4.9'
+    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
 }
 ```
 
