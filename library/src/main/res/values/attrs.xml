@@ -25,6 +25,8 @@
         <attr name="np_max" format="integer" />
         <attr name="np_maxFlingVelocityCoefficient" format="integer" />
         <attr name="np_min" format="integer" />
+        <attr name="np_textInsetStart" format="dimension" />
+        <attr name="np_textInsetEnd" format="dimension" />
         <attr name="np_order" format="enum">
             <enum name="ascending" value="0" />
             <enum name="descending" value="1" />
@@ -57,5 +59,9 @@
         <attr name="np_value" format="integer" />
         <attr name="np_wheelItemCount" format="integer" />
         <attr name="np_wrapSelectorWheel" format="boolean" />
+        <attr name="np_show_highlight" format="boolean" />
+        <attr name="np_highlight_color" format="color" />
+        <attr name="np_highlight_padding_start" format="dimension" />
+        <attr name="np_highlight_padding_end" format="dimension" />
     </declare-styleable>
 </resources>
