@@ -20,7 +20,7 @@ jobs:
 
       # Download and cache dependencies
       - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "library/build.gradle.kts" }}
 
       - run:
           name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
@@ -33,7 +33,7 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "library/build.gradle" }}
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "library/build.gradle.kts" }}
 
       # run tests!
       - run:
